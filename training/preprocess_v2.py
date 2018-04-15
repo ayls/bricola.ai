@@ -1,5 +1,5 @@
 import csv
-from itertools import groupby
+import math
 
 def toDeckIndex(card, hasK, hasB, hasS, hasD):
     if card == '-1':
@@ -29,8 +29,23 @@ def toDeckIndex(card, hasK, hasB, hasS, hasD):
 
     return deckIndex
 
-def processDeckIndexes(rows, hasK, hasB, hasS, hasD):
-    with open("./data/preprocessed/briscola_1.data", "a") as output:
+def addCalculatedFeatures(row, idx):
+    card = int(row[idx])
+    if (card == -1):
+        row = row[:idx + 1] + ["-1", "-1", "-1", "-1", "-1"] + row[idx + 1:]
+    else:
+        type = str(math.floor(card / 10))
+        value = str(11 if (card % 10 == 0) else (10 if (card % 10 == 2) else (2 if (card % 10 == 7) else (3 if (card % 10 == 8) else (4 if (card % 10 == 9) else 0)))))
+        hasBigValue = str(1 if (value == "11" or value == "10") else 0)
+        hasSmallValue = str(1 if (value == "4" or value == "3" or value == "2") else 0)
+        hasValue = str(1 if (hasBigValue == "1" or hasSmallValue == "1") else 0) 
+        row = row[:idx + 1] + [type] + [value] + [hasValue] + [hasBigValue] + [hasSmallValue] + row[idx + 1:]
+
+    return row
+
+# add card value, type, hasBigValue, hasSmallValue, hasValue for three cards in hand and the briscola
+def processRows(rows, hasK, hasB, hasS, hasD):
+    with open("./data/preprocessed/briscola_2.data", "a") as output:
         for row in rows:
             row[1] = str(toDeckIndex(row[1], hasK, hasB, hasS, hasD))
             row[2] = str(toDeckIndex(row[2], hasK, hasB, hasS, hasD))
@@ -38,7 +53,13 @@ def processDeckIndexes(rows, hasK, hasB, hasS, hasD):
             row[4] = str(toDeckIndex(row[4], hasK, hasB, hasS, hasD))
             row[8] = str(toDeckIndex(row[8], hasK, hasB, hasS, hasD))
 
-            output.write(",".join(row) + "\n")
+            newRow = addCalculatedFeatures(row, 1)
+            newRow = addCalculatedFeatures(newRow, 7)
+            newRow = addCalculatedFeatures(newRow, 13)
+            newRow = addCalculatedFeatures(newRow, 19)
+            newRow = addCalculatedFeatures(newRow, 28)
+
+            output.write(",".join(newRow) + "\n")
 
 sliceHasK = False
 sliceHasB = False
@@ -50,7 +71,7 @@ sliceRows = []
 for row in csv.reader(open("./data/preprocessed/briscola_0.data")):
 
     if not currentBriscola is None and row[5] == '40':
-        processDeckIndexes(sliceRows, sliceHasK, sliceHasB, sliceHasS, sliceHasD)
+        processRows(sliceRows, sliceHasK, sliceHasB, sliceHasS, sliceHasD)
         sliceHasK = False
         sliceHasB = False
         sliceHasS = False
@@ -70,4 +91,4 @@ for row in csv.reader(open("./data/preprocessed/briscola_0.data")):
     sliceHasD = sliceHasD or card1 == 'd' or card2 == 'd' or card3 == 'd'
 
 # process final game
-processDeckIndexes(sliceRows, sliceHasK, sliceHasB, sliceHasS, sliceHasD)
+processRows(sliceRows, sliceHasK, sliceHasB, sliceHasS, sliceHasD)
