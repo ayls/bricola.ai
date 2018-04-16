@@ -43,7 +43,6 @@ def addCalculatedFeatures(row, idx):
 
     return row
 
-# add card value, type, hasBigValue, hasSmallValue, hasValue for three cards in hand and the briscola
 def processRows(rows, hasK, hasB, hasS, hasD):
     with open("./data/preprocessed/briscola_2.data", "a") as output:
         for row in rows:

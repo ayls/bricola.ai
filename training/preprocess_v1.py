@@ -29,7 +29,6 @@ def toDeckIndex(card, hasK, hasB, hasS, hasD):
 
     return deckIndex
 
-# add card value, type, hasBigValue, hasSmallValue, hasValue for three cards in hand and the briscola
 def processDeckIndexes(rows, hasK, hasB, hasS, hasD):
     with open("./data/preprocessed/briscola_1.data", "a") as output:
         for row in rows:
