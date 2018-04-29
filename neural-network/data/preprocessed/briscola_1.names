@@ -1,0 +1,23 @@
+Card_id.				|target attribute
+
+P_first:		0, 1.	|1 if player played first card, 0 if not
+Card_1:			0 - 39.	|Index of 1st card in hand
+Card_2:			0 - 39.	|Index of 2nd card in hand
+Card_3:			0 - 39.	|Index of 3rd card in hand
+P_card:			0 - 39.	|Index of opponent's card (if he/she didn't play yet then -1)
+Cards_left:		7 - 40.	|cards left in game
+My_points:		0 - 120.	|my points
+P_points:		0 - 120.	|opponent points
+Briscola:		0 - 39.	|Index of last card in deck (Briscola)
+B_ace_in:		0, 1.		|is ace of the same color as Briscola in game?
+B_two_in:		0, 1.		|is card two of the same color as Briscola in game?
+B_three_in:		0, 1.		|is card three of the same color as Briscola in game?
+B_four_in:		0, 1.		|is card four of the same color as Briscola in game?
+B_five_in:		0, 1.		|is card five the same color as Briscola in game?
+B_six_in:		0, 1.		|is card six of the same color as Briscola in game?
+B_seven_in:		0, 1.		|is card seven of the same color as Briscola in game?
+B_jack_in:		0, 1.		|is jack of the same color as Briscola in game?
+B_queen_in:		0, 1.		|is queen of the same color as Briscola in game?
+B_king_in:	 	0, 1.		|is king of the same color as Briscola in game?
+
+Card_id:		1,2,3.
