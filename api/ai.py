@@ -1,11 +1,6 @@
-#!flask/bin/python
-from flask import Flask, jsonify, request
-from keras.models import model_from_json
 import numpy as np
 import math
-
-app = Flask(__name__)
-model = None
+from keras.models import model_from_json
 
 def load_model():
     json_file = open('./model/model.json', 'r')
@@ -13,7 +8,6 @@ def load_model():
     json_file.close()
     print('loaded model meta data')
 
-    global model
     model = model_from_json(model_json)
     model.load_weights("./model/model.h5")
     print('loaded model weights')
@@ -24,17 +18,11 @@ def load_model():
     # workaround to be able to use predict from other threads
     model.predict(np.zeros((1, 15)))
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    X = parseRequest(request)
-    Y_pred = np.argmax(model.predict(X), axis=1)
+    return model
 
-    return jsonify({'prediction': int(Y_pred[0])})
-
-def parseRequest(request):
-    body = request.get_json(silent=True)
-    X = np.array([calculateFeatures(body['card1']) + calculateFeatures(body['card2']) + calculateFeatures(body['card3']) 
-        + calculateFeatures(body['oppCard']) + calculateFeatures(body['briscola'])])
+def getFeatures(body):
+    X = np.array([calculateFeatures(body['cardsInHand']['0'][0]) + calculateFeatures(body['cardsInHand']['0'][1]) + calculateFeatures(body['cardsInHand']['0'][2]) 
+        + calculateFeatures(body['playedCards']['1']) + calculateFeatures(body['briscola'])])
     return X
 
 def calculateFeatures(card):
@@ -49,7 +37,3 @@ def calculateFeatures(card):
         features = [type, hasBigValue, hasSmallValue]
 
     return features
-
-if __name__ == '__main__':
-    load_model()
-    app.run(debug=True)
