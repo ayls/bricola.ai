@@ -16,6 +16,8 @@ def __playFinalSixSteps(f_Player, f_CardsInHand, s_CardsInHand, f_Card, b_Card):
     totalWonPoints = 0
     maxWonPoints = 0
 
+    # maximise gain (won - loss)
+
     f_CardsInHandToTry = f_CardsInHand
     if (f_Card != -1):
         f_CardsInHandToTry = [f_Card]
