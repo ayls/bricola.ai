@@ -1,8 +1,8 @@
 <template>
   <div v-if="cardsInHand" class="cards-in-hand">
-    <div class="card" v-bind:class="['card__' + cardsInHand[0]]" v-on:click="play(cardsInHand[0])"></div>
-    <div class="card" v-bind:class="['card__' + cardsInHand[1]]" v-on:click="play(cardsInHand[1])"></div>
-    <div class="card" v-bind:class="['card__' + cardsInHand[2]]" v-on:click="play(cardsInHand[2])"></div>
+    <div class="card" v-bind:class="['card__' + cardsInHand[0]]" v-on:click="play(0)"></div>
+    <div class="card" v-bind:class="['card__' + cardsInHand[1]]" v-on:click="play(1)"></div>
+    <div class="card" v-bind:class="['card__' + cardsInHand[2]]" v-on:click="play(2)"></div>
   </div>
 </template>
 
@@ -18,12 +18,13 @@ export default {
     }
   },
   methods: {
-    play (card) {
+    play (cardIdx) {
+      const card = this.cardsInHand[cardIdx];
       if (this.status !== 'yourMove' || card === -1) {
         return;
       }
 
-      this.$emit('play', card)
+      this.$emit('play', cardIdx)
     }
   }  
 }
@@ -36,5 +37,8 @@ div.cards-in-hand div:first-child {
 }
 div.cards-in-hand div:last-child {
   margin-left: 10px;
+}
+div.card {
+  cursor: pointer;
 }
 </style>

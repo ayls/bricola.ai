@@ -52,8 +52,10 @@ export default {
         console.error(error);
       });
     },
-    play (card) {
-      if (card != null) {
+    play (cardIdx) {
+      if (cardIdx != null) {
+        const card = this.state.cardsInHand[1][cardIdx];
+        this.state.cardsInHand[1][cardIdx] = -1;
         this.state.playedCards[1] = card;
       }
 

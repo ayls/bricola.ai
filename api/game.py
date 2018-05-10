@@ -29,7 +29,7 @@ class Game:
                 0: 0,
                 1: 0
             },
-            'briscola': int(cards[6]),
+            'briscola': cards[6],
             'stack': list(map(int, (np.append(cards[7:],[cards[6]])))),
             'firstPlayerIndex': firstPlayerIndex,
             'status': 'yourMove' if firstPlayerIndex == common.humanPlayerIndex else 'aiMove'
@@ -98,7 +98,7 @@ class Game:
 
     def __dealPlayerCard(self, body, player, card, nextCard):
         newCardsInHand = np.array(body['cardsInHand'][str(player)])
-        newCardsInHand[newCardsInHand == card] = nextCard
+        newCardsInHand[newCardsInHand == -1] = nextCard
         
         body['cardsInHand'][str(player)] = list(map(int, newCardsInHand))
         body['playedCards'][str(player)] = -1
@@ -114,8 +114,9 @@ class Game:
         card3 = body['cardsInHand'][str(common.aiPlayerIndex)][2]
         oppCard = body['playedCards'][str(common.humanPlayerIndex)]
         briscola = body['briscola']
-        Y_pred = self.ai.nnPredict(card1, card2, card3, oppCard, briscola)
-        playedCard = body['cardsInHand'][str(common.aiPlayerIndex)][int(Y_pred)]
+        playedCardIdx = self.ai.nnPredict(card1, card2, card3, oppCard, briscola)
+        playedCard = body['cardsInHand'][str(common.aiPlayerIndex)][playedCardIdx]
+        body['cardsInHand'][str(common.aiPlayerIndex)][playedCardIdx] = -1
         body['playedCards'][str(common.aiPlayerIndex)] = playedCard
         body['status'] = 'yourMove' if body['firstPlayerIndex'] == common.aiPlayerIndex else 'endOfTurn'
 
@@ -125,10 +126,11 @@ class Game:
         f_Player = body['firstPlayerIndex']
         f_Card = body['playedCards'][str(f_Player)]
         b_Card = body['briscola']
-        ai_CardsInHand = list(filter(lambda x: x != -1, body['cardsInHand'][str(common.aiPlayerIndex)]))
-        human_CardsInHand = list(filter(lambda x: x != -1, body['cardsInHand'][str(common.humanPlayerIndex)]))
+        cardsInHand = body['cardsInHand']
 
-        playedCard = finalSix.determineFinalSixPlay(ai_CardsInHand, human_CardsInHand, f_Player, f_Card, b_Card)
+        playedCardIdx = finalSix.determineFinalSixPlay(cardsInHand, f_Player, f_Card, b_Card)
+        playedCard = body['cardsInHand'][str(common.aiPlayerIndex)][playedCardIdx]
+        body['cardsInHand'][str(common.aiPlayerIndex)][playedCardIdx] = -1
         body['playedCards'][str(common.aiPlayerIndex)] = playedCard
         body['status'] = 'yourMove' if body['firstPlayerIndex'] == common.aiPlayerIndex else 'endOfTurn'
 

@@ -1,15 +1,22 @@
 import common
 import numpy as np
 
-def determineFinalSixPlay(ai_CardsInHand, human_CardsInHand, f_Player, f_Card, b_Card):
+def determineFinalSixPlay(cardsInHand, f_Player, f_Card, b_Card):
+    ai_CardsInHand = list(filter(lambda x: x != -1, cardsInHand[str(common.aiPlayerIndex)]))
+    human_CardsInHand = list(filter(lambda x: x != -1, cardsInHand[str(common.humanPlayerIndex)]))
+
     playedCard = None
 
-    if (f_Player == common.aiPlayerIndex):
+    if (len(ai_CardsInHand) == 1):
+        playedCard = ai_CardsInHand[0]
+    elif (f_Player == common.aiPlayerIndex):
         _, playedCard = __playFinalSixSteps(f_Player, ai_CardsInHand, human_CardsInHand, -1, b_Card)
     else:
         _, playedCard = __playFinalSixSteps(f_Player, human_CardsInHand, ai_CardsInHand, f_Card, b_Card)
 
-    return playedCard
+    playedCardIdx = cardsInHand[str(common.aiPlayerIndex)].index(playedCard)
+
+    return playedCardIdx
 
 def __playFinalSixSteps(f_Player, f_CardsInHand, s_CardsInHand, f_Card, b_Card):
     playedCard = None
