@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: "Stack",
+  name: 'Stack',
   props: [
     'stack',
     'briscola'
@@ -22,6 +22,7 @@ div.card-rotate {
     -ms-transform: rotate(90deg);
     -o-transform: rotate(90deg);
     transform: rotate(90deg);
+    margin-left: 50px;
 }
 div.card-overlap {
     z-index: 100;

@@ -14,7 +14,7 @@ class Game:
         cards = np.linspace(0, 39, 40)
         random.shuffle(cards)
 
-        firstPlayerIndex = random.randint(0, 1),
+        firstPlayerIndex = random.randint(0, 1)
 
         return {
             'cardsInHand': {
@@ -86,7 +86,9 @@ class Game:
         return body
 
     def __setNextPlayStatus(self, body, player):
-        if (len(body['cardsInHand'][str(common.aiPlayerIndex)]) > 0 or len(body['cardsInHand'][str(common.humanPlayerIndex)]) > 0):
+        ai_CardsInHand = list(filter(lambda x: x != -1, body['cardsInHand'][str(common.aiPlayerIndex)]))
+        human_CardsInHand = list(filter(lambda x: x != -1, body['cardsInHand'][str(common.humanPlayerIndex)]))
+        if (len(ai_CardsInHand) > 0 or len(human_CardsInHand) > 0):
             body['firstPlayerIndex'] = player
             body['status'] = 'yourMove' if player == common.humanPlayerIndex else 'aiMove'
         else:
@@ -107,10 +109,10 @@ class Game:
         return len(body['stack']) > 0    
 
     def __nnPredict(self, body):
-        card1 = body['cardsInHand']['0'][0]
-        card2 = body['cardsInHand']['0'][1]
-        card3 = body['cardsInHand']['0'][2]
-        oppCard = body['playedCards']['1']
+        card1 = body['cardsInHand'][str(common.aiPlayerIndex)][0]
+        card2 = body['cardsInHand'][str(common.aiPlayerIndex)][1]
+        card3 = body['cardsInHand'][str(common.aiPlayerIndex)][2]
+        oppCard = body['playedCards'][str(common.humanPlayerIndex)]
         briscola = body['briscola']
         Y_pred = self.ai.nnPredict(card1, card2, card3, oppCard, briscola)
         playedCard = body['cardsInHand'][str(common.aiPlayerIndex)][int(Y_pred)]

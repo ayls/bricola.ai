@@ -6,7 +6,7 @@ import game
 app = Flask(__name__)
 CORS(app)
 
-g = None
+g = game.Game()
 
 @app.route('/deal', methods=['POST'])
 def deal():
@@ -22,5 +22,4 @@ def play():
     return jsonify(body)
 
 if __name__ == '__main__':
-    g = game.Game()
     app.run(debug=True)

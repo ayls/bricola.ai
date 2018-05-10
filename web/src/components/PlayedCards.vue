@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: "PlayedCards",
+  name: 'PlayedCards',
   props: [
     'playedCards'
   ]

@@ -10,16 +10,45 @@
             <div>
                 Your Points: <span>{{points[1]}}</span>
             </div>
+            <div>
+                Cards remaining: <span>{{stack.length}}</span>
+            </div>
+            <div>
+                <span>{{formatStatus(status)}}</span>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-  name: "GameStatus",
+  name: 'GameStatus',
   props: [
-    'points'
-  ]
+    'points',
+    'stack',
+    'status'
+  ],
+  methods: {
+    formatStatus (status) {
+      if (status === 'aiMove') {
+        return 'AI move';
+      }
+
+      if (status === 'yourMove') {
+        return 'Your move';
+      }
+
+      if (status === 'endOfTurn') {
+        return 'End of turn';
+      }
+
+      if (status === 'gameOver') {
+        return 'Game over';
+      }
+
+      return status;
+    }
+  }  
 }
 </script>
 

@@ -1,7 +1,11 @@
 <template>
   <div id="app">
     <div class="status">
-      <game-status v-bind:points="state == null ? null : state.points" v-on:deal="deal()"/>
+      <game-status 
+        v-bind:points="state == null ? null : state.points"
+        v-bind:stack="state == null ? null : state.stack"
+        v-bind:status="state == null ? null : state.status"
+        v-on:deal="deal()"/>
     </div>
     <div v-if="state" class="board">
       <div class="left">
@@ -11,11 +15,11 @@
         <div class="right-part">
           <played-cards v-bind:played-cards="state.playedCards" />
         </div>
-        <div class="right-part" style="display: block">
-          <cards-in-hand v-bind:cards-in-hand="state.cardsInHand[0]"/>
+        <div class="right-part" style="display: none">
+          <cards-in-hand v-bind:cards-in-hand="state.cardsInHand[0]" />
         </div>
         <div class="right-part">
-          <cards-in-hand v-bind:cards-in-hand="state.cardsInHand[1]"/>
+          <cards-in-hand v-bind:cards-in-hand="state.cardsInHand[1]" v-bind:status="state.status" v-on:play="play($event)"/>
         </div>
       </div>
     </div>
@@ -38,9 +42,36 @@ export default {
   },
   methods: {
     deal () {
-      axios({ method: 'POST', 'url': 'http://localhost:5000/deal' }).then(result => {
+      axios.post('http://localhost:5000/deal')
+      .then(result => {
         this.state = result.data;
-        console.log(this.state)
+        if (result.data.status === 'aiMove') {
+          this.play();
+        }
+      }, error => {
+        console.error(error);
+      });
+    },
+    play (card) {
+      if (card != null) {
+        this.state.playedCards[1] = card;
+      }
+
+      axios.post('http://localhost:5000/play', 
+        this.state, 
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+      .then(result => {
+        this.state = result.data;
+        if (result.data.status === 'aiMove') {
+          setTimeout(() => { this.play(); }, 500);
+        }
+        if (result.data.status === 'endOfTurn') {
+          setTimeout(() => { this.play(); }, 2500);
+        }
       }, error => {
         console.error(error);
       });
@@ -69,6 +100,7 @@ div.status {
 div.board {
   padding-top: 20px;
   display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }
 div.board div.left {
   grid-column: 1;
