@@ -34,15 +34,18 @@ import PlayedCards from './components/PlayedCards.vue';
 import CardsInHand from './components/CardsInHand.vue';
 
 export default {
-  name: 'app',
+  name: 'App',
   data () {
     return {
       state: null
     }
   },
+  props: [
+    'baseUrl'
+  ],
   methods: {
     deal () {
-      axios.post('http://localhost:5000/deal')
+      axios.post(this.baseUrl + '/deal')
       .then(result => {
         this.state = result.data;
         if (result.data.status === 'aiMove') {
@@ -59,7 +62,7 @@ export default {
         this.state.playedCards[1] = card;
       }
 
-      axios.post('http://localhost:5000/play', 
+      axios.post(this.baseUrl + '/play', 
         this.state, 
         {
           headers: {
