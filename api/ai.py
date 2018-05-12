@@ -19,7 +19,7 @@ class AI:
         print('compiled model')
 
         # hack to be able to use predict from other Flask threads
-        self.model.predict(np.zeros((1, 15)))
+        self.model.predict(np.zeros((1, 10)))
 
     def nnPredict(self, card1, card2, card3, oppCard, briscola):
         X = self.__getFeatures(card1, card2, card3, oppCard, briscola)
@@ -35,12 +35,10 @@ class AI:
     def __calculateFeatures(self, card):
         features = None
         if (card == -1):
-            features = [-1, -1, -1]
+            features = [-1, -1]
         else:
             type = math.floor(card / 10)
             value = (11 if (card % 10 == 0) else (10 if (card % 10 == 2) else (2 if (card % 10 == 7) else (3 if (card % 10 == 8) else (4 if (card % 10 == 9) else 0)))))
-            hasBigValue = (1 if (value == 11 or value == 10) else 0)
-            hasSmallValue = (1 if (value == 4 or value == 3 or value == 2) else 0)
-            features = [type, hasBigValue, hasSmallValue]
+            features = [type, value]
 
         return features

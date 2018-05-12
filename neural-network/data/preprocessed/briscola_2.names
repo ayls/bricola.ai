@@ -1,48 +1,48 @@
-Card_id.				|target attribute
+Idx     Card_id.				|target attribute
 
-P_first:		        0, 1.	|1 if player played first card, 0 if not
-Card_1:			        0 - 39.	|Index of 1st card in hand
-Card_1_Type:            0,1,2,3. | Card 1 Type
-Card_1_Points:          0,1,2,3,10,11. | Card 1 Value
-Card_1_HasValue:        0, 1 | Card 1 Has Value
-Card_1_HasBigValue:     0, 1 | Card 1 Has Big Value
-Card_1_HasSmallValue:   0, 1 | Card 1 Has Small Value
-Card_2:			        0 - 39.	|Index of 2nd card in hand
-Card_2_Type:            0,1,2,3. | Card 2 Type
-Card_2_Points:          0,1,2,3,10,11. | Card 2 Value
-Card_2_HasValue:        0, 1 | Card 2 Has Value
-Card_2_HasBigValue:     0, 1 | Card 2 Has Big Value
-Card_2_HasSmallValue:   0, 1 | Card 2 Has Small Value
-Card_3:			        0 - 39.	|Index of 3rd card in hand
-Card_3_Type:            0,1,2,3. | Card 3 Type
-Card_3_Points:          0,1,2,3,10,11. | Card 3 Value
-Card_3_HasValue:        0, 1 | Card 3 Has Value
-Card_3_HasBigValue:     0, 1 | Card 3 Has Big Value
-Card_3_HasSmallValue:   0, 1 | Card 3 Has Small Value
-P_Card:			        0 - 39.	|Index of opponent's card (if he/she didn't play yet then -1)
-P_Card_Type:            0,1,2,3. | Card P Type
-P_Card_Points:          0,1,2,3,10,11. | Card P Value
-P_Card_HasValue:        0, 1 | Card P Has Value
-P_Card_HasBigValue:     0, 1 | Card P Has Big Value
-P_Card_HasSmallValue:   0, 1 | Card P Has Small Value
-Cards_left:		        7 - 40.	|cards left in game
-My_points:		        0 - 120.	|my points
-P_points:		        0 - 120.	|opponent points
-Briscola:		        0 - 39.	|Index of last card in deck (Briscola)
-Briscola_Type:            0,1,2,3. | Briscola Type
-Briscola_Points:          0,1,2,3,10,11. | Briscola Value
-Briscola_HasValue:        0, 1 | Briscola Has Value
-Briscola_HasBigValue:     0, 1 | Briscola Has Big Value
-Briscola_HasSmallValue:   0, 1 | Briscola Has Small Value
-B_ace_in:		        0, 1.		|is ace of the same color as Briscola in game?
-B_two_in:		        0, 1.		|is card two of the same color as Briscola in game?
-B_three_in:		        0, 1.		|is card three of the same color as Briscola in game?
-B_four_in:		        0, 1.		|is card four of the same color as Briscola in game?
-B_five_in:		        0, 1.		|is card five the same color as Briscola in game?
-B_six_in:		        0, 1.		|is card six of the same color as Briscola in game?
-B_seven_in:		        0, 1.		|is card seven of the same color as Briscola in game?
-B_jack_in:		        0, 1.		|is jack of the same color as Briscola in game?
-B_queen_in:		        0, 1.		|is queen of the same color as Briscola in game?
-B_king_in:	 	        0, 1.		|is king of the same color as Briscola in game?
+0       P_first:		        0, 1.	|1 if player played first card, 0 if not
+1       Card_1:			        0 - 39.	|Index of 1st card in hand
+2       Card_1_Type:            0,1,2,3. | Card 1 Type
+3       Card_1_Points:          0,1,2,3,10,11. | Card 1 Value
+4       Card_1_HasValue:        0, 1 | Card 1 Has Value
+5       Card_1_HasBigValue:     0, 1 | Card 1 Has Big Value
+6       Card_1_HasSmallValue:   0, 1 | Card 1 Has Small Value
+7       Card_2:			        0 - 39.	|Index of 2nd card in hand
+8       Card_2_Type:            0,1,2,3. | Card 2 Type
+9       Card_2_Points:          0,1,2,3,10,11. | Card 2 Value
+10      Card_2_HasValue:        0, 1 | Card 2 Has Value
+11      Card_2_HasBigValue:     0, 1 | Card 2 Has Big Value
+12      Card_2_HasSmallValue:   0, 1 | Card 2 Has Small Value
+13      Card_3:			        0 - 39.	|Index of 3rd card in hand
+14      Card_3_Type:            0,1,2,3. | Card 3 Type
+15      Card_3_Points:          0,1,2,3,10,11. | Card 3 Value
+16      Card_3_HasValue:        0, 1 | Card 3 Has Value
+17      Card_3_HasBigValue:     0, 1 | Card 3 Has Big Value
+18      Card_3_HasSmallValue:   0, 1 | Card 3 Has Small Value
+19      P_Card:			        0 - 39.	|Index of opponent's card (if he/she didn't play yet then -1)
+20      P_Card_Type:            0,1,2,3. | Card P Type
+21      P_Card_Points:          0,1,2,3,10,11. | Card P Value
+22      P_Card_HasValue:        0, 1 | Card P Has Value
+23      P_Card_HasBigValue:     0, 1 | Card P Has Big Value
+24      P_Card_HasSmallValue:   0, 1 | Card P Has Small Value
+25      Cards_left:		        7 - 40.	|cards left in game
+26      My_points:		        0 - 120.	|my points
+27      P_points:		        0 - 120.	|opponent points
+28      Briscola:		        0 - 39.	|Index of last card in deck (Briscola)
+29      Briscola_Type:            0,1,2,3. | Briscola Type
+30      Briscola_Points:          0,1,2,3,10,11. | Briscola Value
+31      Briscola_HasValue:        0, 1 | Briscola Has Value
+32      Briscola_HasBigValue:     0, 1 | Briscola Has Big Value
+33      Briscola_HasSmallValue:   0, 1 | Briscola Has Small Value
+34      B_ace_in:		        0, 1.		|is ace of the same color as Briscola in game?
+35      B_two_in:		        0, 1.		|is card two of the same color as Briscola in game?
+36      B_three_in:		        0, 1.		|is card three of the same color as Briscola in game?
+37      B_four_in:		        0, 1.		|is card four of the same color as Briscola in game?
+38      B_five_in:		        0, 1.		|is card five the same color as Briscola in game?
+39      B_six_in:		        0, 1.		|is card six of the same color as Briscola in game?
+40      B_seven_in:		        0, 1.		|is card seven of the same color as Briscola in game?
+41      B_jack_in:		        0, 1.		|is jack of the same color as Briscola in game?
+42      B_queen_in:		        0, 1.		|is queen of the same color as Briscola in game?
+43      B_king_in:	 	        0, 1.		|is king of the same color as Briscola in game?
 
 Card_id:		        1,2,3.
