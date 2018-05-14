@@ -22,7 +22,7 @@ div.card-rotate {
     -ms-transform: rotate(90deg);
     -o-transform: rotate(90deg);
     transform: rotate(90deg);
-    margin-left: 50px;
+    margin: 10px 0 0 175px;
 }
 div.card-overlap {
     z-index: 100;
