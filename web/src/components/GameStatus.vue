@@ -1,9 +1,9 @@
 <template>
-    <div>
+    <div class="game-status">
         <div class="buttons">
-            <button v-on:click="$emit('deal')">Deal</button>
+            <button v-on:click="$emit('deal')" class="button button-large">Deal</button>
         </div>
-        <div v-if="points" class="points">
+        <div v-if="points && stack" class="points">
             <div>
                 AI Points: <span>{{points[0]}}</span>
             </div>
@@ -13,6 +13,8 @@
             <div>
                 Cards remaining: <span>{{stack.length}}</span>
             </div>
+        </div>
+        <div v-if="status" class="play-status">
             <div>
                 <span>{{formatStatus(status)}}</span>
             </div>
@@ -53,14 +55,33 @@ export default {
 </script>
 
 <style scoped>
-div.buttons {
+div {
+    font-size: 45px;
+    font-weight: bold;
     display: inline-block;
 }
+div span {
+    color: yellow;
+}
+div.game-status {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+}
+div.buttons {
+    grid-column: 1;
+    text-align: left;
+}
 div.points {
-    display: inline-block;
+    grid-column: 2 / span 3;
 }
 div.points div {
     padding: 0 10px;
-    display: inline-block;
+}
+div.play-status {
+    grid-column: 5;
+    text-align: right;
+}
+div.play-status div {
+    padding: 0 10px;
 }
 </style>

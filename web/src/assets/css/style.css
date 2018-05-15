@@ -2,6 +2,20 @@ body {
   background-color: lightseagreen;
   color: white;
 }
+.button {
+  background-color: gray;
+  border: 2px solid white;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 30px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.button.button-large {
+  padding: 15px 75px;
+}
 div.card {
   background-image: url('../images/cards.png');
   display: inline-block;
@@ -136,6 +150,8 @@ div.card__-1 {
   border-radius: 15px;
 }
 div.card__100 {
+  height: 304px;
+  width: 182px;
   background-image: none;
   background: repeating-linear-gradient(
     45deg,

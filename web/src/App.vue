@@ -12,13 +12,15 @@
         <stack v-bind:stack="state.stack" v-bind:briscola="state.briscola" />
       </div>
       <div class="right">
-        <div class="right-part">
+        <div>
           <played-cards v-bind:played-cards="state.playedCards" />
         </div>
-        <div class="right-part" style="display: none">
+      </div>
+      <div class="bottom">
+        <div class="bottom-part" style="display: none">
           <cards-in-hand v-bind:cards-in-hand="state.cardsInHand[0]" />
         </div>
-        <div class="right-part">
+        <div class="bottom-part">
           <cards-in-hand v-bind:cards-in-hand="state.cardsInHand[1]" v-bind:status="state.status" v-on:play="play($event)"/>
         </div>
       </div>
@@ -97,6 +99,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+  padding: 0 20px;
 }
 div.status {
   padding: 20px 0;
@@ -110,16 +113,17 @@ div.board {
 div.board div.left {
   grid-column: 1;
   grid-row: 1;
-  padding: 10% 0;
 }
 div.board div.right {
   grid-column: 2;
   grid-row: 1;
 }
-div.board div.right div.right-part:first-child {
-  margin-bottom: 20px;
+div.board div.bottom {
+  padding-top: 90px;
+  grid-column: 1 / span 2;
+  grid-row: 2;
 }
-div.board div.right div.right-part:last-child {
-  margin-top: 20px;
+div.board div.bottom .bottom-part:last-child {
+  margin-top: 10px;
 }
 </style>
