@@ -2,10 +2,16 @@ body {
   background-color: lightseagreen;
   color: white;
 }
-.button {
-  background-color: gray;
-  border: 2px solid white;
+html,
+body {
+  height: 100%;
+  margin: 0
+}
+a, a:visited, a:hover {
+  text-decoration: none;
   color: white;
+}
+.button {
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -13,8 +19,23 @@ body {
   cursor: pointer;
   font-weight: bold;
 }
+.button.button-gray {
+  background-color: gray;
+  border: 2px solid white;
+  color: white;
+}
+.button.button-white {
+  background-color: white;
+  border: 2px solid gray;
+  color: gray;
+}
+.button.button-medium {
+  height: 70px;
+  width: 120px;
+}
 .button.button-large {
-  padding: 15px 75px;
+  height: 70px;
+  width: 250px;
 }
 div.card {
   background-image: url('../images/cards.png');

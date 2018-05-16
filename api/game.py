@@ -87,12 +87,18 @@ class Game:
 
     def __setNextPlayStatus(self, body, player):
         ai_CardsInHand = list(filter(lambda x: x != -1, body['cardsInHand'][str(common.aiPlayerIndex)]))
+        ai_points = body['points'][str(common.aiPlayerIndex)]
         human_CardsInHand = list(filter(lambda x: x != -1, body['cardsInHand'][str(common.humanPlayerIndex)]))
+        human_points = body['points'][str(common.humanPlayerIndex)]
         if (len(ai_CardsInHand) > 0 or len(human_CardsInHand) > 0):
             body['firstPlayerIndex'] = player
-            body['status'] = 'yourMove' if player == common.humanPlayerIndex else 'aiMove'
+            body['status'] = 'yourMove' if player == common.humanPlayerIndex else 'aiMove'        
+        elif (ai_points > human_points):
+            body['status'] = 'aiWon'
+        elif (human_points > ai_points):
+            body['status'] = 'youWon'
         else:
-            body['status'] = 'gameOver'
+            body['status'] = 'tie'
 
         return body
 

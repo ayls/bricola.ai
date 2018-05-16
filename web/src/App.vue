@@ -7,23 +7,30 @@
         v-bind:status="state == null ? null : state.status"
         v-on:deal="deal()"/>
     </div>
-    <div v-if="state" class="board">
-      <div class="left">
-        <stack v-bind:stack="state.stack" v-bind:briscola="state.briscola" />
-      </div>
-      <div class="right">
-        <div>
-          <played-cards v-bind:played-cards="state.playedCards" />
+    <div class="content">
+      <div v-if="state" class="board">
+        <div class="left">
+          <stack v-bind:stack="state.stack" v-bind:briscola="state.briscola" />
+        </div>
+        <div class="right">
+          <div>
+            <played-cards v-bind:played-cards="state.playedCards" />
+          </div>
+        </div>
+        <div class="bottom">
+          <div class="bottom-part" style="display: none">
+            <cards-in-hand v-bind:cards-in-hand="state.cardsInHand[0]" />
+          </div>
+          <div class="bottom-part">
+            <cards-in-hand v-bind:cards-in-hand="state.cardsInHand[1]" v-bind:status="state.status" v-on:play="play($event)"/>
+          </div>
         </div>
       </div>
-      <div class="bottom">
-        <div class="bottom-part" style="display: none">
-          <cards-in-hand v-bind:cards-in-hand="state.cardsInHand[0]" />
-        </div>
-        <div class="bottom-part">
-          <cards-in-hand v-bind:cards-in-hand="state.cardsInHand[1]" v-bind:status="state.status" v-on:play="play($event)"/>
-        </div>
-      </div>
+    </div>
+    <div class="footer">
+      <p><a href="https://mauriziogrillo.deviantart.com/art/Carte-Siciliane-625754565" target="_blank">Card design by Maurizio Grillo</a></p>
+      <p><a href="https://www.pagat.com/aceten/briscola.html" target="_blank">Briscola Rules</a></p>
+      <p><a href="https://github.com/ayls/bricola.ai" target="_blank">Source Code</a></p>
     </div>
   </div>
 </template>
@@ -100,10 +107,17 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   padding: 0 20px;
+  display: flex;
+  flex-flow: column;
+  height: 100%;  
 }
 div.status {
   padding: 20px 0;
   border-bottom: 1px solid white;
+  flex: 0 1 117px;
+}
+div.content {
+  flex: 1 1 auto;
 }
 div.board {
   padding-top: 20px;
@@ -125,5 +139,10 @@ div.board div.bottom {
 }
 div.board div.bottom .bottom-part:last-child {
   margin-top: 10px;
+}
+div.footer {
+  border-top: 1px solid white;
+  padding-top: 10px;
+  flex: 0 1 125px;
 }
 </style>
