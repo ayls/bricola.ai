@@ -114,7 +114,7 @@ export default {
 div.status {
   padding: 20px 0;
   border-bottom: 1px solid white;
-  flex: 0 1 117px;
+  flex: 0 1 auto;
 }
 div.content {
   flex: 1 1 auto;
