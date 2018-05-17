@@ -33,7 +33,7 @@ Change to to web folder and execute:
 npm install
 ```
 
-Then change to src folder and execute:
+Then execute:
 ```
-vue serve
+npm run serve
 ```
