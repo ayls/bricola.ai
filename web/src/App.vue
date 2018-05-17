@@ -2,27 +2,27 @@
   <div id="app">
     <div class="status">
       <game-status 
-        v-bind:points="state == null ? null : state.points"
-        v-bind:stack="state == null ? null : state.stack"
-        v-bind:status="state == null ? null : state.status"
+        v-bind:points="$store.state.gameState == null ? null : $store.state.gameState.points"
+        v-bind:stack="$store.state.gameState == null ? null : $store.state.gameState.stack"
+        v-bind:status="$store.state.gameState == null ? null : $store.state.gameState.status"
         v-on:deal="deal()"/>
     </div>
     <div class="content">
-      <div v-if="state" class="board">
+      <div v-if="$store.state.gameState" class="board">
         <div class="left">
-          <stack v-bind:stack="state.stack" v-bind:briscola="state.briscola" />
+          <stack v-bind:stack="$store.state.gameState.stack" v-bind:briscola="$store.state.gameState.briscola" />
         </div>
         <div class="right">
           <div>
-            <played-cards v-bind:played-cards="state.playedCards" />
+            <played-cards v-bind:played-cards="$store.state.gameState.playedCards" />
           </div>
         </div>
         <div class="bottom">
           <div class="bottom-part" style="display: none">
-            <cards-in-hand v-bind:cards-in-hand="state.cardsInHand[0]" />
+            <cards-in-hand v-bind:cards-in-hand="$store.state.gameState.cardsInHand[0]" />
           </div>
           <div class="bottom-part">
-            <cards-in-hand v-bind:cards-in-hand="state.cardsInHand[1]" v-bind:status="state.status" v-on:play="play($event)"/>
+            <cards-in-hand v-bind:cards-in-hand="$store.state.gameState.cardsInHand[1]" v-bind:status="$store.state.gameState.status" v-on:play="play($event)"/>
           </div>
         </div>
       </div>
@@ -34,60 +34,51 @@
 </template>
 
 <script>
-import axios from "axios";
-import GameStatus from './components/GameStatus.vue';
-import Stack from './components/Stack.vue';
-import PlayedCards from './components/PlayedCards.vue';
-import CardsInHand from './components/CardsInHand.vue';
-import FooterLinks from './components/FooterLinks.vue';
+import GameStatus from "./components/GameStatus.vue";
+import Stack from "./components/Stack.vue";
+import PlayedCards from "./components/PlayedCards.vue";
+import CardsInHand from "./components/CardsInHand.vue";
+import FooterLinks from "./components/FooterLinks.vue";
 
 export default {
-  name: 'App',
-  data () {
-    return {
-      state: null
-    }
-  },
-  props: [
-    'baseUrl'
-  ],
+  name: "App",
+  props: ["baseUrl"],
   methods: {
-    deal () {
-      axios.post(this.baseUrl + '/deal')
-      .then(result => {
-        this.state = result.data;
-        if (result.data.status === 'aiMove') {
-          this.play();
-        }
-      }, error => {
-        console.error(error);
-      });
+    deal() {
+      this.$apiClient
+        .deal()
+        .then(result => {
+          this.$store.commit('set', result);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
-    play (cardIdx) {
+    play(cardIdx) {
       if (cardIdx != null) {
-        const card = this.state.cardsInHand[1][cardIdx];
-        this.state.cardsInHand[1][cardIdx] = -1;
-        this.state.playedCards[1] = card;
+        this.$store.commit('setPlayedCard', cardIdx);
       }
 
-      axios.post(this.baseUrl + '/play', 
-        this.state, 
-        {
-          headers: {
-            'Content-Type': 'application/json'
+      this._play();
+    },
+    _play() {
+      this.$apiClient
+        .play(this.$store.state.gameState)
+        .then(result => {
+          this.$store.commit('set', result);
+          if (result.status === "aiMove") {
+            setTimeout(() => {
+              this._play();
+            }, 500);
+          } else if (result.status === "endOfTurn") {
+            setTimeout(() => {
+              this._play();
+            }, 1500);
           }
         })
-      .then(result => {
-        this.state = result.data;
-        if (result.data.status === 'aiMove') {
-          setTimeout(() => { this.play(); }, 500);
-        }
-        if (result.data.status === 'endOfTurn') {
-          setTimeout(() => { this.play(); }, 2500);
-        }
-      }, error => {
-        console.error(error);
-      });
+        .catch(error => {
+          console.log(error);
+        });
     }
   },
   components: {
@@ -97,19 +88,19 @@ export default {
     CardsInHand,
     FooterLinks
   }
-}
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   padding: 0 20px;
   display: flex;
   flex-flow: column;
-  height: 100%;  
+  height: 100%;
 }
 div.status {
   padding: 20px 0;

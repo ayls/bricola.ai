@@ -6,7 +6,7 @@
         <span> | </span>        
         <a href="https://github.com/ayls/bricola.ai" target="_blank">Source Code</a>
         <span> | </span>        
-        <a href="http://ayls.org" target="_blank">Ayls.org</a>        
+        <a href="http://ayls.org" target="_blank">ayls.org</a>        
     </p>
 </template>
 
