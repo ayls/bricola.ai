@@ -12,8 +12,5 @@ if (configElement) {
 }
 
 new Vue({
-  el: '#app',
-  template: '<App v-bind:baseUrl="baseUrl" />',
-  components: { App },
-  data: { baseUrl: baseUrl } 
-})
+  render: h => h(App, {props: { baseUrl }})
+}).$mount('#app')
