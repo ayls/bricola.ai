@@ -4,17 +4,17 @@
             <div class="buttons">
                 <button v-on:click="deal()" class="button button-large button-gray">New Game</button>
             </div>
-            <div v-if="points" class="points">
+            <div v-if="$store.state.gameState" class="points">
                 <div>
-                    AI: <span>{{points[0]}}</span>
+                    AI: <span>{{$store.state.gameState.points[0]}}</span>
                 </div>
                 <div>
-                    You: <span>{{points[1]}}</span>
+                    You: <span>{{$store.state.gameState.points[1]}}</span>
                 </div>
             </div>
-            <div v-if="status" class="play-status">
+            <div v-if="$store.state.gameState" class="play-status">
                 <div>
-                    <span>{{formatStatus(status)}}</span>
+                    <span>{{formatStatus()}}</span>
                 </div>
             </div>
         </div>
@@ -31,13 +31,9 @@ import Modal from './Modal.vue';
 
 export default {
   name: 'GameStatus',
-  props: [
-    'points',
-    'status'
-  ],
   methods: {
     deal () {
-        if (this.status && ['aiWon', 'youWon', 'tie'].indexOf(this.status) === -1) {
+        if (this.$store.state.gameState && this.$store.state.gameState.status && ['aiWon', 'youWon', 'tie'].indexOf(this.$store.state.gameState.status) === -1) {
             this.$refs.dealModal.open();
         } else {
             this.$emit('deal');
@@ -48,24 +44,24 @@ export default {
             this.$emit('deal');
         }
     },
-    formatStatus (status) {
-        if (status === 'aiMove') {
+    formatStatus () {
+        if (this.$store.state.gameState.status === 'aiMove') {
             return 'AI move';
         }
 
-        if (status === 'yourMove') {
+        if (this.$store.state.gameState.status === 'yourMove') {
             return 'Your move';
         }
 
-        if (status === 'aiWon') {
+        if (this.$store.state.gameState.status === 'aiWon') {
             return 'AI Won!';
         }
 
-        if (status === 'youWon') {
+        if (this.$store.state.gameState.status === 'youWon') {
             return 'You Won!';
         }
 
-        if (status === 'tie') {
+        if (this.$store.state.gameState.status === 'tie') {
             return 'It is a tie!';
         }
 

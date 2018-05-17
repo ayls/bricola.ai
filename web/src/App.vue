@@ -2,27 +2,24 @@
   <div id="app">
     <div class="status">
       <game-status 
-        v-bind:points="$store.state.gameState == null ? null : $store.state.gameState.points"
-        v-bind:stack="$store.state.gameState == null ? null : $store.state.gameState.stack"
-        v-bind:status="$store.state.gameState == null ? null : $store.state.gameState.status"
         v-on:deal="deal()"/>
     </div>
     <div class="content">
-      <div v-if="$store.state.gameState" class="board">
+      <div class="board">
         <div class="left">
-          <stack v-bind:stack="$store.state.gameState.stack" v-bind:briscola="$store.state.gameState.briscola" />
+          <stack />
         </div>
         <div class="right">
           <div>
-            <played-cards v-bind:played-cards="$store.state.gameState.playedCards" />
+            <played-cards />
           </div>
         </div>
         <div class="bottom">
           <div class="bottom-part" style="display: none">
-            <cards-in-hand v-bind:cards-in-hand="$store.state.gameState.cardsInHand[0]" />
+            <cards-in-hand v-bind:handIdx="0" />
           </div>
           <div class="bottom-part">
-            <cards-in-hand v-bind:cards-in-hand="$store.state.gameState.cardsInHand[1]" v-bind:status="$store.state.gameState.status" v-on:play="play($event)"/>
+            <cards-in-hand v-bind:handIdx="1" v-on:play="play($event)"/>
           </div>
         </div>
       </div>
@@ -135,6 +132,6 @@ div.board div.bottom .bottom-part:last-child {
 div.footer {
   border-top: 1px solid white;
   padding-top: 10px;
-  flex: 0 1 125px;
+  flex: 0 1 60px;
 }
 </style>

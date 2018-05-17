@@ -1,17 +1,13 @@
 <template>
-  <div v-if="stack && stack.length > 0">
-      <div class="card card-overlap card__100"><div><span>{{stack.length}}</span></div></div>
-      <div class="card card-rotate" v-bind:class="['card__' + briscola]"></div>
+  <div v-if="$store.state.gameState && $store.state.gameState.stack.length > 0">
+      <div class="card card-overlap card__100"><div><span>{{$store.state.gameState.stack.length}}</span></div></div>
+      <div class="card card-rotate" v-bind:class="['card__' + $store.state.gameState.briscola]"></div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Stack',
-  props: [
-    'stack',
-    'briscola'
-  ]
+  name: 'Stack'
 }
 </script>
 

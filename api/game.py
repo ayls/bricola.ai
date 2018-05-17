@@ -36,8 +36,10 @@ class Game:
         }
 
     def play(self, body):
-        if self.__bothPlayed(body):
+        if self.__isEndOfTurn(body):
             body = self.__endTurn(body)
+        elif self.__haveBothPlayed(body):
+            body = self.__setEndOfTurn(body)
         elif self.__useNN(body):
             body = self.__nnPredict(body)
         else:
@@ -45,7 +47,14 @@ class Game:
 
         return body
 
-    def __bothPlayed(self, body):
+    def __isEndOfTurn(self, body):
+        return body['status'] == 'endOfTurn'
+
+    def __setEndOfTurn(self, body):
+        body['status'] = 'endOfTurn'
+        return body      
+
+    def __haveBothPlayed(self, body):
         return body['playedCards'][str(common.aiPlayerIndex)] != -1 and body['playedCards'][str(common.humanPlayerIndex)] != -1
 
     def __endTurn(self, body):
