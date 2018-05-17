@@ -28,9 +28,7 @@
       </div>
     </div>
     <div class="footer">
-      <p><a href="https://mauriziogrillo.deviantart.com/art/Carte-Siciliane-625754565" target="_blank">Card design by Maurizio Grillo</a></p>
-      <p><a href="https://www.pagat.com/aceten/briscola.html" target="_blank">Briscola Rules</a></p>
-      <p><a href="https://github.com/ayls/bricola.ai" target="_blank">Source Code</a></p>
+      <footer-links />
     </div>
   </div>
 </template>
@@ -41,6 +39,7 @@ import GameStatus from './components/GameStatus.vue';
 import Stack from './components/Stack.vue';
 import PlayedCards from './components/PlayedCards.vue';
 import CardsInHand from './components/CardsInHand.vue';
+import FooterLinks from './components/FooterLinks.vue';
 
 export default {
   name: 'App',
@@ -95,7 +94,8 @@ export default {
     GameStatus,
     Stack,
     PlayedCards,
-    CardsInHand
+    CardsInHand,
+    FooterLinks
   }
 }
 </script>
@@ -121,6 +121,7 @@ div.content {
 }
 div.board {
   padding-top: 20px;
+  padding-bottom: 20px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }
@@ -133,7 +134,7 @@ div.board div.right {
   grid-row: 1;
 }
 div.board div.bottom {
-  padding-top: 90px;
+  padding-top: 40px;
   grid-column: 1 / span 2;
   grid-row: 2;
 }

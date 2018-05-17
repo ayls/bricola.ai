@@ -3,7 +3,7 @@
         <div class="modal-content">
             <p class="header"><slot name="header"></slot></p>
             <p class="text"><slot name="text"></slot></p>
-            <div class="buttons">
+            <div v-if="buttons && buttons.length > 0" class="buttons">
                 <button v-for="button in buttons" v-bind:key="button" v-on:click="click(button)" class="button button-medium button-white">{{button}}</button>
             </div>
         </div>
@@ -75,5 +75,8 @@ div.buttons {
 }
 div.buttons button {
     margin-right: 20px;
+}
+div.buttons button:last-child {
+    margin-right: 0;
 }
 </style>

@@ -98,6 +98,9 @@ div.points {
 div.points div {
     padding: 0 10px;
     display: inline-block;    
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);    
 }
 div.play-status {
     grid-column: 6 / span 2;
@@ -105,5 +108,8 @@ div.play-status {
 }
 div.play-status div {
     padding: 0 10px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);       
 }
 </style>
