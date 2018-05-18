@@ -1,8 +1,7 @@
 <template>
   <div id="app">
     <div class="status">
-      <game-status 
-        v-on:deal="deal()"/>
+      <game-status />
     </div>
     <div class="content">
       <div class="board">
@@ -19,7 +18,7 @@
             <cards-in-hand v-bind:handIdx="0" />
           </div>
           <div class="bottom-part">
-            <cards-in-hand v-bind:handIdx="1" v-on:play="play($event)"/>
+            <cards-in-hand v-bind:handIdx="1" />
           </div>
         </div>
       </div>
@@ -39,45 +38,6 @@ import FooterLinks from "./components/FooterLinks.vue";
 
 export default {
   name: "App",
-  props: ["baseUrl"],
-  methods: {
-    deal() {
-      this.$apiClient
-        .deal()
-        .then(result => {
-          this.$store.commit('set', result);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
-    play(cardIdx) {
-      if (cardIdx != null) {
-        this.$store.commit('setPlayedCard', cardIdx);
-      }
-
-      this._play();
-    },
-    _play() {
-      this.$apiClient
-        .play(this.$store.state.gameState)
-        .then(result => {
-          this.$store.commit('set', result);
-          if (result.status === "aiMove") {
-            setTimeout(() => {
-              this._play();
-            }, 500);
-          } else if (result.status === "endOfTurn") {
-            setTimeout(() => {
-              this._play();
-            }, 1500);
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }
-  },
   components: {
     GameStatus,
     Stack,

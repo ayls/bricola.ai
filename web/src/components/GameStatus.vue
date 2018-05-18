@@ -4,6 +4,11 @@
             <div class="buttons">
                 <button v-on:click="deal()" class="button button-large button-gray">New Game</button>
             </div>
+            <div v-if="$store.state.gameState" class="play-status">
+                <div>
+                    <span>{{formatStatus()}}</span>
+                </div>
+            </div>
             <div v-if="$store.state.gameState" class="points">
                 <div>
                     AI: <span>{{$store.state.gameState.points[0]}}</span>
@@ -11,12 +16,7 @@
                 <div>
                     You: <span>{{$store.state.gameState.points[1]}}</span>
                 </div>
-            </div>
-            <div v-if="$store.state.gameState" class="play-status">
-                <div>
-                    <span>{{formatStatus()}}</span>
-                </div>
-            </div>
+            </div>            
         </div>
 
         <Modal ref="dealModal" v-bind:buttons="['Yes', 'No']" v-on:close="closeModal($event)">
@@ -36,8 +36,18 @@ export default {
         if (this.$store.state.gameState && this.$store.state.gameState.status && ['aiWon', 'youWon', 'tie'].indexOf(this.$store.state.gameState.status) === -1) {
             this.$refs.dealModal.open();
         } else {
-            this.$emit('deal');
+            this._deal();
         }
+    },
+    _deal() {
+      this.$apiClient
+        .deal()
+        .then(result => {
+          this.$store.commit('set', result);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     closeModal(result) {
         if (result === 'Yes') {
@@ -79,17 +89,27 @@ div.game-status {
     font-size: 45px;
     font-weight: bold;
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 }
 div.game-status span {
     color: yellow;
 }
 div.buttons {
-    grid-column: 1 / span 2;
+    grid-column: 1;
     text-align: left;
 }
+div.play-status {
+    grid-column: 2;
+}
+div.play-status div {
+    padding: 0 10px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);       
+}
 div.points {
-    grid-column: 3 / span 3;
+    grid-column: 3;
+    text-align: right;
 }
 div.points div {
     padding: 0 10px;
@@ -97,15 +117,5 @@ div.points div {
     position: relative;
     top: 50%;
     transform: translateY(-50%);    
-}
-div.play-status {
-    grid-column: 6 / span 2;
-    text-align: right;
-}
-div.play-status div {
-    padding: 0 10px;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);       
 }
 </style>

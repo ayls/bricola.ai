@@ -12,10 +12,10 @@ export default function makeStore() {
             set(state, newState) {
                 state.gameState = newState;
             },
-            setPlayedCard(state, cardIdx) {
-                const card = state.gameState.cardsInHand[1][cardIdx];
-                state.gameState.cardsInHand[1][cardIdx] = -1;
-                state.gameState.playedCards[1] = card;
+            setPlayedCard(state, { handIdx, cardIdx }) {
+                const card = state.gameState.cardsInHand[handIdx][cardIdx];
+                Vue.set(state.gameState.cardsInHand[handIdx], cardIdx, -1);
+                Vue.set(state.gameState.playedCards, handIdx, card);
             }
         }
     })
