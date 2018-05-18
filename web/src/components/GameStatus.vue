@@ -6,7 +6,7 @@
             </div>
             <div v-if="$store.state.gameState" class="play-status">
                 <div>
-                    <span>{{formatStatus()}}</span>
+                    <span>{{formatMoveStatus()}}</span>
                 </div>
             </div>
             <div v-if="$store.state.gameState" class="points">
@@ -19,9 +19,14 @@
             </div>            
         </div>
 
-        <Modal ref="dealModal" v-bind:buttons="['Yes', 'No']" v-on:close="closeModal($event)">
+        <Modal ref="dealModal" v-bind:buttons="['Yes', 'No']" v-on:close="closeDealModal($event)">
             <template slot="header">Start a new game?</template>
             <template slot="text">A game is in progress, are you sure you want to start a new game?</template>
+        </Modal>
+
+        <Modal ref="gameEndedModal" v-bind:buttons="['Yes', 'No']" v-on:close="closeEndOfGameModal($event)">
+            <template slot="header">{{formatEndOfGameStatus()}}</template>
+            <template slot="text">Do you want to start a new game?</template>
         </Modal>
     </div>
 </template>
@@ -31,9 +36,14 @@ import Modal from './Modal.vue';
 
 export default {
   name: 'GameStatus',
+  computed: {
+    gameStatus () {
+        return this.$store.state.gameState ? this.$store.state.gameState.status : null;
+    }
+  },
   methods: {
     deal () {
-        if (this.$store.state.gameState && this.$store.state.gameState.status && ['aiWon', 'youWon', 'tie'].indexOf(this.$store.state.gameState.status) === -1) {
+        if (this.$store.state.gameState && this.gameStatus && ['aiWon', 'youWon', 'tie'].indexOf(this.gameStatus) === -1) {
             this.$refs.dealModal.open();
         } else {
             this._deal();
@@ -49,33 +59,50 @@ export default {
           console.log(error);
         });
     },
-    closeModal(result) {
+    closeDealModal(result) {
         if (result === 'Yes') {
-            this.$emit('deal');
+            this._deal();
         }
     },
-    formatStatus () {
-        if (this.$store.state.gameState.status === 'aiMove') {
+    formatMoveStatus () {
+        if (this.gameStatus === 'aiMove') {
             return 'AI move';
         }
 
-        if (this.$store.state.gameState.status === 'yourMove') {
+        if (this.gameStatus === 'yourMove') {
             return 'Your move';
         }
 
-        if (this.$store.state.gameState.status === 'aiWon') {
+        return null;
+    },
+    formatEndOfGameStatus () {
+        if (this.gameStatus === 'aiWon') {
             return 'AI Won!';
         }
 
-        if (this.$store.state.gameState.status === 'youWon') {
+        if (this.gameStatus === 'youWon') {
             return 'You Won!';
         }
 
-        if (this.$store.state.gameState.status === 'tie') {
+        if (this.gameStatus === 'tie') {
             return 'It is a tie!';
         }
 
         return null;
+    },    
+    closeEndOfGameModal(result) {
+        if (result === 'Yes') {
+            this._deal();
+        } else {
+            this.$store.commit('set', null);
+        }
+    },
+  },
+  watch: {
+    gameStatus: function (newStatus) {
+        if (['aiWon', 'youWon', 'tie'].indexOf(newStatus) !== -1) {
+            this.$refs.gameEndedModal.open();
+        }
     }
   },
   components: {
