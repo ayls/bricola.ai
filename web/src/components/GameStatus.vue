@@ -30,7 +30,7 @@
         </Modal>
 
         <Modal ref="loadingModal">
-            <template slot="header">{{loadingMessage}}</template>
+            <template slot="text">{{loadingMessage}}</template>
         </Modal>
     </div>
 </template>
@@ -54,6 +54,10 @@ export default {
   },
   methods: {
     deal() {
+      if (this.promise && !this.promise.done) {
+        return;
+      }
+
       if (
         this.$store.state.gameState &&
         this.gameStatus &&
@@ -78,7 +82,7 @@ export default {
         if (!this.promise.done) {
           this._displayMessages();
         }
-      }, 5000);
+      }, 2500);
     },
     _displayMessages() {
       let messageId = 0;
