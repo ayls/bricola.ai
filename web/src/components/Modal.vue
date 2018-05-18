@@ -25,9 +25,12 @@ export default {
     open() {
         this.isActive = true;
     },
-    click(button) {
+    close() {
         this.isActive = false;
+    },
+    click(button) {
         this.$emit('close', button);
+        this.close();
     }
   }
 }
