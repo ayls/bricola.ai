@@ -40,7 +40,7 @@ export default {
 .modal {
     position: fixed;
     z-index: 10000;
-    padding-top: 100px;
+    padding-top: 130px;
     left: 0;
     top: 0;
     width: 100%;

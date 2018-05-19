@@ -32,6 +32,11 @@
         <Modal ref="loadingModal">
             <template slot="text">{{loadingMessage}}</template>
         </Modal>
+
+        <Modal ref="errorModal" v-bind:buttons="['Ok']">
+            <template slot="header">An Error Occured</template>
+            <template slot="text">There was an error when communicating with server</template>
+        </Modal>        
     </div>
 </template>
 
@@ -42,19 +47,23 @@ export default {
   name: "GameStatus",
   data () {
       return {
-          loadingMessage: null
+          loadingPromise: null,
+          loadingMessage: null,
+          loadingIntervalHandle: null,
+          loadingMessageId: 0,
+          loadingRetries: 0
       };
   },
   computed: {
     gameStatus() {
       return this.$store.state.gameState
         ? this.$store.state.gameState.status
-        : null;
+        : null
     }
   },
   methods: {
     deal() {
-      if (this.promise && !this.promise.done) {
+      if (this.loadingPromise && !this.loadingPromise.done) {
         return;
       }
 
@@ -65,53 +74,6 @@ export default {
       ) {
         this.$refs.dealModal.open();
       } else {
-        this._deal();
-      }
-    },
-    _deal() {
-      this.promise = this.$apiClient.deal();
-      this.promise
-        .then(result => {
-          this.$store.commit("set", result);
-          this.promise.done = true;
-        })
-        .catch(error => {
-          console.log(error);
-        });
-      setTimeout(() => {
-        if (!this.promise.done) {
-          this._displayMessages();
-        }
-      }, 2500);
-    },
-    _displayMessages() {
-      let messageId = 0;
-      const messages = [
-        "Oops, it appears the server is asleep...",
-        "I am waking it up!",
-        "Might take a while though",
-        "I am running this on the cheap side, you know",
-        "So bear with me, please",
-        "Are we there yet? (obviously not)",
-        "Eh, what about a cup of coffee?",
-        "Jeeze, this is horribly slow",
-        "Wake up already will ya!?",
-        "Hold on I am going to check what is going on",
-        "I might be back (or not), wait here!"
-      ];
-      this.loadingMessage = messages[messageId++];
-      this.$refs.loadingModal.open();
-      const intervalHandle = setInterval(() => {
-        if (!this.promise.done) {
-          this.loadingMessage = messages[messageId++];
-        } else {
-          this.$refs.loadingModal.close();
-          clearInterval(intervalHandle);
-        }
-      }, 5000);
-    },
-    closeDealModal(result) {
-      if (result === "Yes") {
         this._deal();
       }
     },
@@ -141,13 +103,76 @@ export default {
 
       return null;
     },
+    closeDealModal(result) {
+      if (result === "Yes") {
+        this._deal();
+      }
+    },    
     closeEndOfGameModal(result) {
       if (result === "Yes") {
         this._deal();
       } else {
         this.$store.commit("set", null);
       }
-    }
+    },
+    _deal() {
+      this.loadingPromise = this.$apiClient.deal();
+      this.loadingPromise
+        .then(result => {
+          this.$store.commit("set", result);
+          this.loadingPromise.done = true;
+        })
+        .catch(error => {
+          if (this.loadingIntervalHandle && this.loadingRetries < 3) {
+            this.loadingRetries++;
+            clearInterval(this.loadingIntervalHandle);
+            this._displayLoadingMessages();
+          } else {
+            this._closeLoadingModal();
+            this.$refs.errorModal.open();
+          }
+
+          console.log(error);
+        });
+
+      setTimeout(() => {
+        if (!this.loadingPromise.done) {
+          this._displayLoadingMessages();
+        }
+      }, 1500);
+    },    
+    _displayLoadingMessages() {
+      const messages = [
+        "Oops, it appears the server is asleep...",
+        "I am waking it up!",
+        "Might take a while though",
+        "I am running this on the cheap side, you know",
+        "So bear with me, please",
+        "Are we there yet? (obviously not)",
+        "Eh, what about a cup of coffee?",
+        "Jeeze, this is horribly slow",
+        "Wake up already will ya!?",
+        "Hold on I am going to check what is going on",
+        "I'll be back, wait here!"
+      ];
+      this.loadingMessage = messages[this.loadingMessageId];
+      this.$refs.loadingModal.open();
+      this.loadingIntervalHandle = setInterval(() => {
+        if (!this.loadingPromise.done) {
+          this.loadingMessageId = this.loadingMessageId < messages.length - 1 ? this.loadingMessageId + 1 : this.loadingMessageId;
+          this.loadingMessage = messages[this.loadingMessageId];
+        } else {
+          clearInterval(this.loadingIntervalHandle);
+          this._closeLoadingModal();
+        }
+      }, 5000);
+    },    
+    _closeLoadingModal () {
+      this.$refs.loadingModal.close();
+      this.loadingMessageId = 0;
+      this.loadingRetries = 0;
+      this.loadingPromise = null;
+    },
   },
   watch: {
     gameStatus: function(newStatus) {
