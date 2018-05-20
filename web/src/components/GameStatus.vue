@@ -219,7 +219,7 @@ div.points {
   text-align: right;
 }
 div.points div {
-  padding: 0 10px;
+  padding: 0 5px;
   display: inline-block;
   position: relative;
   top: 50%;
