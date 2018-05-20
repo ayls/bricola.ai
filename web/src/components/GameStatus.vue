@@ -116,6 +116,15 @@ export default {
       }
     },
     _deal() {
+      this._initiateDeal();
+
+      setTimeout(() => {
+        if (!this.loadingPromise.done) {
+          this._displayLoadingMessages();
+        }
+      }, 1500);
+    },  
+    _initiateDeal() {
       this.loadingPromise = this.$apiClient.deal();
       this.loadingPromise
         .then(result => {
@@ -127,6 +136,7 @@ export default {
             this.loadingRetries++;
             clearInterval(this.loadingIntervalHandle);
             this._displayLoadingMessages();
+            this._initiateDeal();
           } else {
             this._closeLoadingModal();
             this.$refs.errorModal.open();
@@ -134,13 +144,7 @@ export default {
 
           console.log(error);
         });
-
-      setTimeout(() => {
-        if (!this.loadingPromise.done) {
-          this._displayLoadingMessages();
-        }
-      }, 1500);
-    },    
+    }, 
     _displayLoadingMessages() {
       const messages = [
         "Oops, it appears the server is asleep...",
