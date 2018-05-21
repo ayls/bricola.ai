@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     deal() {
-      if (this.loadingPromise && !this.loadingPromise.done) {
+      if (this.loadingPromise) {
         return;
       }
 
@@ -119,7 +119,7 @@ export default {
       this._initiateDeal();
 
       setTimeout(() => {
-        if (!this.loadingPromise.done) {
+        if (this.loadingPromise) {
           this._displayLoadingMessages();
         }
       }, 1500);
@@ -129,16 +129,18 @@ export default {
       this.loadingPromise
         .then(result => {
           this.$store.commit("set", result);
-          this.loadingPromise.done = true;
+          this._clearInterval();
+          this._endLoading();
         })
         .catch(error => {
           if (this.loadingIntervalHandle && this.loadingRetries < 3) {
             this.loadingRetries++;
-            clearInterval(this.loadingIntervalHandle);
+            this._clearInterval();
             this._initiateDeal();
             this._displayLoadingMessages();
           } else {
-            this._closeLoadingModal();
+            this._clearInterval();
+            this._endLoading();
             this.$refs.errorModal.open();
           }
 
@@ -160,23 +162,25 @@ export default {
         "I'll be back, wait here!"
       ];
       this.loadingMessage = messages[this.loadingMessageId];
-      this.$refs.loadingModal.open();
       this.loadingIntervalHandle = setInterval(() => {
-        if (!this.loadingPromise.done) {
+        if (this.loadingPromise) {
           this.loadingMessageId = this.loadingMessageId < messages.length - 1 ? this.loadingMessageId + 1 : this.loadingMessageId;
           this.loadingMessage = messages[this.loadingMessageId];
-        } else {
-          clearInterval(this.loadingIntervalHandle);
-          this._closeLoadingModal();
         }
       }, 5000);
+      this.$refs.loadingModal.open();
     },    
-    _closeLoadingModal () {
+    _endLoading () {
       this.$refs.loadingModal.close();
       this.loadingMessageId = 0;
       this.loadingRetries = 0;
       this.loadingPromise = null;
     },
+    _clearInterval () {
+      if (this.loadingIntervalHandle) {
+        clearInterval(this.loadingIntervalHandle);
+      }
+    }
   },
   watch: {
     gameStatus: function(newStatus) {
