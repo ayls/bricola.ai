@@ -135,8 +135,8 @@ export default {
           if (this.loadingIntervalHandle && this.loadingRetries < 3) {
             this.loadingRetries++;
             clearInterval(this.loadingIntervalHandle);
-            this._displayLoadingMessages();
             this._initiateDeal();
+            this._displayLoadingMessages();
           } else {
             this._closeLoadingModal();
             this.$refs.errorModal.open();
@@ -150,9 +150,9 @@ export default {
         "Oops, it appears the server is asleep...",
         "I am waking it up!",
         "Might take a while though",
-        "I am running this on the cheap side, you know",
+        "I am running this on the cheap side",
         "So bear with me, please",
-        "Are we there yet? (obviously not)",
+        "Are we there yet?",
         "Eh, what about a cup of coffee?",
         "Jeeze, this is horribly slow",
         "Wake up already will ya!?",
