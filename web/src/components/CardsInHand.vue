@@ -63,7 +63,4 @@ div.cards-in-hand div:first-child {
 div.cards-in-hand div:last-child {
   margin-left: 10px;
 }
-/* div.card {
-  cursor: pointer;
-} */
 </style>
