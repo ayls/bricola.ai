@@ -9,17 +9,9 @@ The original game is available here: http://ayls.org/briscola/index.html
 ## Prerequisites
 
 - Python 3.6
-- pipenv installed
 - Node 8 or greater
-- vue CLI installed globally
 
 ## Running API
-
-Run:
-```
-pipenv shell
-pipenv install
-```  
 
 Change to to api folder and execute:
 ```
