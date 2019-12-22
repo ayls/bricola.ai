@@ -13,9 +13,14 @@ The original game is available here: http://ayls.org/briscola/index.html
 
 ## Running API
 
-Change to to api folder and execute:
+Change to api folder and build the docker image:
 ```
-python app.py
+docker build -t briscola-ai-api .
+```
+
+Then launch the container:
+```
+docker run -dit -p 5000:5000 briscola-ai-api
 ```
 
 ## Running Web
