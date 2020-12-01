@@ -1,9 +1,9 @@
 import numpy as np
 import math
 import random
-import ai
-import finalSix
-import common
+from . import ai
+from . import finalSix
+from . import state
 
 class Game:
 
@@ -32,7 +32,7 @@ class Game:
             'briscola': cards[6],
             'stack': list(map(int, (np.append(cards[7:],[cards[6]])))),
             'firstPlayerIndex': firstPlayerIndex,
-            'status': 'yourMove' if firstPlayerIndex == common.humanPlayerIndex else 'aiMove'
+            'status': 'yourMove' if firstPlayerIndex == state.humanPlayerIndex else 'aiMove'
         }
 
     def play(self, body):
@@ -55,7 +55,7 @@ class Game:
         return body      
 
     def __haveBothPlayed(self, body):
-        return body['playedCards'][str(common.aiPlayerIndex)] != -1 and body['playedCards'][str(common.humanPlayerIndex)] != -1
+        return body['playedCards'][str(state.aiPlayerIndex)] != -1 and body['playedCards'][str(state.humanPlayerIndex)] != -1
 
     def __endTurn(self, body):
         f_Player = body['firstPlayerIndex']
@@ -63,10 +63,10 @@ class Game:
         f_Card = body['playedCards'][str(f_Player)]
         s_Card = body['playedCards'][str(s_Player)]
         b_Card = body['briscola']
-        w_Player = common.determineCollectingPlayer(f_Player, f_Card, s_Card, b_Card)        
+        w_Player = state.determineCollectingPlayer(f_Player, f_Card, s_Card, b_Card)        
         l_Player = 1 - w_Player
-        w_Card, _, w_CardValue = common.getCardInfo(body['playedCards'][str(w_Player)])
-        l_Card, _, l_CardValue = common.getCardInfo(body['playedCards'][str(l_Player)])
+        w_Card, _, w_CardValue = state.getCardInfo(body['playedCards'][str(w_Player)])
+        l_Card, _, l_CardValue = state.getCardInfo(body['playedCards'][str(l_Player)])
 
         body = self.__addPoints(body, w_Player, w_CardValue, l_CardValue)
         body = self.__dealCards(body, w_Player, w_Card, l_Player, l_Card)
@@ -95,13 +95,13 @@ class Game:
         return body
 
     def __setNextPlayStatus(self, body, player):
-        ai_CardsInHand = list(filter(lambda x: x != -1, body['cardsInHand'][str(common.aiPlayerIndex)]))
-        ai_points = body['points'][str(common.aiPlayerIndex)]
-        human_CardsInHand = list(filter(lambda x: x != -1, body['cardsInHand'][str(common.humanPlayerIndex)]))
-        human_points = body['points'][str(common.humanPlayerIndex)]
+        ai_CardsInHand = list(filter(lambda x: x != -1, body['cardsInHand'][str(state.aiPlayerIndex)]))
+        ai_points = body['points'][str(state.aiPlayerIndex)]
+        human_CardsInHand = list(filter(lambda x: x != -1, body['cardsInHand'][str(state.humanPlayerIndex)]))
+        human_points = body['points'][str(state.humanPlayerIndex)]
         if (len(ai_CardsInHand) > 0 or len(human_CardsInHand) > 0):
             body['firstPlayerIndex'] = player
-            body['status'] = 'yourMove' if player == common.humanPlayerIndex else 'aiMove'        
+            body['status'] = 'yourMove' if player == state.humanPlayerIndex else 'aiMove'        
         elif (ai_points > human_points):
             body['status'] = 'aiWon'
         elif (human_points > ai_points):
@@ -124,16 +124,16 @@ class Game:
         return len(body['stack']) > 0    
 
     def __nnPredict(self, body):
-        card1 = body['cardsInHand'][str(common.aiPlayerIndex)][0]
-        card2 = body['cardsInHand'][str(common.aiPlayerIndex)][1]
-        card3 = body['cardsInHand'][str(common.aiPlayerIndex)][2]
-        oppCard = body['playedCards'][str(common.humanPlayerIndex)]
+        card1 = body['cardsInHand'][str(state.aiPlayerIndex)][0]
+        card2 = body['cardsInHand'][str(state.aiPlayerIndex)][1]
+        card3 = body['cardsInHand'][str(state.aiPlayerIndex)][2]
+        oppCard = body['playedCards'][str(state.humanPlayerIndex)]
         briscola = body['briscola']
         playedCardIdx = self.ai.nnPredict(card1, card2, card3, oppCard, briscola)
-        playedCard = body['cardsInHand'][str(common.aiPlayerIndex)][playedCardIdx]
-        body['cardsInHand'][str(common.aiPlayerIndex)][playedCardIdx] = -1
-        body['playedCards'][str(common.aiPlayerIndex)] = playedCard
-        body['status'] = 'yourMove' if body['firstPlayerIndex'] == common.aiPlayerIndex else 'endOfTurn'
+        playedCard = body['cardsInHand'][str(state.aiPlayerIndex)][playedCardIdx]
+        body['cardsInHand'][str(state.aiPlayerIndex)][playedCardIdx] = -1
+        body['playedCards'][str(state.aiPlayerIndex)] = playedCard
+        body['status'] = 'yourMove' if body['firstPlayerIndex'] == state.aiPlayerIndex else 'endOfTurn'
 
         return body
 
@@ -144,9 +144,9 @@ class Game:
         cardsInHand = body['cardsInHand']
 
         playedCardIdx = finalSix.determineFinalSixPlay(cardsInHand, f_Player, f_Card, b_Card)
-        playedCard = body['cardsInHand'][str(common.aiPlayerIndex)][playedCardIdx]
-        body['cardsInHand'][str(common.aiPlayerIndex)][playedCardIdx] = -1
-        body['playedCards'][str(common.aiPlayerIndex)] = playedCard
-        body['status'] = 'yourMove' if body['firstPlayerIndex'] == common.aiPlayerIndex else 'endOfTurn'
+        playedCard = body['cardsInHand'][str(state.aiPlayerIndex)][playedCardIdx]
+        body['cardsInHand'][str(state.aiPlayerIndex)][playedCardIdx] = -1
+        body['playedCards'][str(state.aiPlayerIndex)] = playedCard
+        body['status'] = 'yourMove' if body['firstPlayerIndex'] == state.aiPlayerIndex else 'endOfTurn'
 
         return body

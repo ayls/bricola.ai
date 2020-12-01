@@ -1,6 +1,5 @@
 import numpy as np
 import math
-import common
 from keras.models import model_from_json
 
 class AI:

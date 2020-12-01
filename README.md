@@ -11,9 +11,9 @@ The original game is available here: http://ayls.org/briscola/index.html
 - Python 3.6
 - Node 8 or greater
 
-## Running API
+## Running Flask version of the API
 
-Change to api folder and build the docker image:
+Change to api/flask folder and build the docker image:
 ```
 docker build -t briscola-ai-api .
 ```
@@ -23,6 +23,14 @@ Then launch the container:
 docker run -dit -p 5000:5000 briscola-ai-api
 ```
 
+## Running Azure functions version of the API
+
+Ensure you have Azure Function tools installed (https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local?tabs=windows%2Ccsharp%2Cbash#v2)
+
+Change to api/azure_functions and run:
+```
+func host start --cors *
+```
 ## Running Web
 
 Change to to web folder and execute:
