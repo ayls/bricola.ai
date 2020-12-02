@@ -1,17 +1,23 @@
 import numpy as np
 import math
+import os
 from keras.models import model_from_json
 
 class AI:
 
     def __init__(self):
-        json_file = open('./model/model.json', 'r')
+        scriptpath = os.path.abspath(__file__)
+        scriptdir = os.path.dirname(scriptpath)
+
+        model_filename = os.path.join(scriptdir, 'model', 'model.json')
+        json_file = open(model_filename, 'r')
         model_json = json_file.read()
         json_file.close()
         print('loaded model meta data')
 
         self.model = model_from_json(model_json)
-        self.model.load_weights("./model/model.h5")
+        weights_filename = os.path.join(scriptdir, 'model', 'model.h5')        
+        self.model.load_weights(weights_filename)
         print('loaded model weights')
 
         self.model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])

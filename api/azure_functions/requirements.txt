@@ -3,3 +3,7 @@
 # Manually managing azure-functions-worker may cause unexpected issues
 
 azure-functions
+numpy==1.16.0
+tensorflow==1.15.4
+keras==2.1.6
+h5py~=2.10.0

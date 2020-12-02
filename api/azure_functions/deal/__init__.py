@@ -6,13 +6,7 @@ from ..common import game
 
 g = game.Game()
 
-# def initializeGame():
-#   # if g is None:
-#   g = Game()
-
-def main(req: func.HttpRequest) -> func.HttpResponse:
-  # initializeGame()
-  
+def main(req: func.HttpRequest) -> func.HttpResponse: 
   deal = g.deal()
 
   return json.dumps(deal)

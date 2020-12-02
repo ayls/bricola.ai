@@ -33,7 +33,7 @@ func host start --cors *
 ```
 ## Running Web
 
-Change to to web folder and execute:
+To run against Flask version of API simply change to to web folder and execute:
 ```
 npm install
 ```
@@ -42,3 +42,5 @@ Then execute:
 ```
 npm run serve
 ```
+
+To target Azure functions API go to index.html and modify the API's base url.

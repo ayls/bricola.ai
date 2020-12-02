@@ -6,12 +6,9 @@ import './assets/css/style.css'
 
 Vue.config.productionTip = false
 
-let baseUrl = 'http://localhost:5000';
 const configElement = document.getElementById( 'config' );
-if (configElement) {
-  const config = JSON.parse( configElement.innerHTML );
-  baseUrl = config.baseUrl;
-}
+const config = JSON.parse( configElement.innerHTML );
+const baseUrl = config.baseUrl;
 
 const apiClient = makeApiClient(baseUrl);
 const store = makeStore();
