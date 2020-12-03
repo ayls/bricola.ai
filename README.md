@@ -25,7 +25,7 @@ docker run -dit -p 5000:5000 briscola-ai-api
 
 ## Running Azure functions version of the API
 
-Ensure you have Azure Function tools installed (https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local?tabs=windows%2Ccsharp%2Cbash#v2)
+Ensure you have [Azure Function tools installed](https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local?tabs=windows%2Ccsharp%2Cbash#v2)
 
 Change to api/azure_functions and run:
 ```
