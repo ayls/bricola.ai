@@ -1,12 +1,12 @@
 #!flask/bin/python
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
-from common import game
+from common import *
 
 app = Flask(__name__)
 CORS(app)
 
-g = game.Game()
+g = initGame()
 
 @app.route('/deal', methods=['POST'])
 def deal():
