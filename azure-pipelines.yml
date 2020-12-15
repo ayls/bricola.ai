@@ -25,13 +25,13 @@ stages:
       displayName: 'copy web files to: $(Build.ArtifactStagingDirectory)'
       inputs:
         SourceFolder: web/dist
-        TargetFolder: $(Build.ArtifactStagingDirectory)
+        TargetFolder: $(Build.ArtifactStagingDirectory)/web
         CleanTargetFolder: true
     - task: CopyFiles@2
       displayName: 'copy API files to: $(Build.ArtifactStagingDirectory)'
       inputs:
         SourceFolder: api/azure_functions
-        TargetFolder: $(Build.ArtifactStagingDirectory)
+        TargetFolder: $(Build.ArtifactStagingDirectory)/api
         CleanTargetFolder: true
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: drop'
