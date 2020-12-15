@@ -1,8 +1,12 @@
 trigger:
 - master
 
+variables:
+  apiBuildworkingDirectory: '$(System.DefaultWorkingDirectory)/api/azure_functions'
+
 pool:
   vmImage: 'ubuntu-latest'
+
 stages:  
 - stage: build
   jobs:
@@ -27,12 +31,36 @@ stages:
         SourceFolder: web/dist
         TargetFolder: $(Build.ArtifactStagingDirectory)/web
         CleanTargetFolder: true
-    - task: CopyFiles@2
-      displayName: 'copy API files to: $(Build.ArtifactStagingDirectory)'
+
+    - bash: |
+        if [ -f extensions.csproj ]
+        then
+            dotnet build extensions.csproj --runtime ubuntu.16.04-x64 --output ./bin
+        fi
+      workingDirectory: $(workingDirectory)
+      displayName: 'Build extensions'        
+
+    - task: UsePythonVersion@0
+      displayName: 'use Python 3.6'
       inputs:
-        SourceFolder: api/azure_functions
-        TargetFolder: $(Build.ArtifactStagingDirectory)/api
-        CleanTargetFolder: true
+        versionSpec: 3.6
+
+    - bash: |
+        python -m venv worker_venv
+        source worker_venv/bin/activate
+        pip install -r requirements.txt
+      workingDirectory: $(apiBuildWorkingDirectory)
+      displayName: 'install API application dependencies'        
+
+    - task: ArchiveFiles@2
+      displayName: 'Archive files'
+      inputs:
+        rootFolderOrFile: '$(apiBuildWorkingDirectory)'
+        includeRootFolder: false
+        archiveType: zip
+        archiveFile: $(Build.ArtifactStagingDirectory)/api/$(Build.BuildId).zip
+        replaceExistingArchive: true      
+
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: drop'
 - stage: deploy
@@ -45,19 +73,17 @@ stages:
         deploy:    
           # assuming the storage account and azure functions app already exist
           steps:
-          - task: AzureRmWebAppDeployment@4
+          - task: AzureFunctionApp@1
             displayName: deploy api
             inputs:
-              ConnectionType: 'AzureRM'
               azureSubscription: 'Azure'
-              appType: 'webAppLinux'
-              WebAppName: '$(API_FUNCTIONS_NAME)'
-              packageForLinux: '$$(Agent.BuildDirectory)/drop/api'
-              RuntimeStack: 'PYTHON|3.6'            
+              appType: 'functionAppLinux'
+              appName: '$(API_FUNCTIONS_NAME)'
+              package: '$(Pipeline.Workspace)/drop/api/$(Build.BuildId).zip'
           - task: kasunkodagoda.regex-match-replace.regex-match-replace.RegExMatchReplace@2
             displayName: RegEx match & replace
             inputs:
-              PathToFile: $(Agent.BuildDirectory)/drop/web/index.html
+              PathToFile: $(Pipeline.Workspace)/drop/web/index.html
               RegEx: '"baseUrl":"http://localhost:5000"'
               ValueToReplace: '"baseUrl":"$(API_BASE_URL)"'
           - task: AzureCLI@1
@@ -72,5 +98,5 @@ stages:
               azureSubscription: '$(AZURE_SUBSCRIPTION)'
               scriptLocation: inlineScript
               inlineScript: az storage blob upload-batch --account-name $(STORAGE_ACCOUNT_NAME) -s . -d \$web
-              workingDirectory: $(Agent.BuildDirectory)/drop/web
+              workingDirectory: $(Pipeline.Workspace)/drop/web
 
