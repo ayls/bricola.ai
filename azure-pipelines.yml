@@ -30,7 +30,7 @@ stages:
     - task: CopyFiles@2
       displayName: 'copy API files to: $(Build.ArtifactStagingDirectory)'
       inputs:
-        SourceFolder: api/azure-functions
+        SourceFolder: api/azure_functions
         TargetFolder: $(Build.ArtifactStagingDirectory)
         CleanTargetFolder: true
     - task: PublishBuildArtifacts@1
