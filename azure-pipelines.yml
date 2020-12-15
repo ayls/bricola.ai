@@ -77,7 +77,7 @@ stages:
           - task: AzureFunctionApp@1
             displayName: deploy api
             inputs:
-              azureSubscription: 'Azure'
+              azureSubscription: '$(AZURE_SUBSCRIPTION)'
               appType: 'functionAppLinux'
               appName: '$(API_FUNCTIONS_NAME)'
               package: '$(Pipeline.Workspace)/drop/api/$(Build.BuildId).zip'
