@@ -1,0 +1,38 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+stages:  
+- stage: build
+  jobs:
+  - job: build
+    displayName: Build
+    steps:
+    - task: Npm@1
+      displayName: npm install
+      inputs:
+        workingDir: web
+        verbose: false
+    - task: Npm@1
+      displayName: npm build
+      inputs:
+        command: custom
+        workingDir: web
+        verbose: false
+        customCommand: run build
+    - task: CopyFiles@2
+      displayName: 'copy web files to: $(Build.ArtifactStagingDirectory)'
+      inputs:
+        SourceFolder: web/dist
+        TargetFolder: $(Build.ArtifactStagingDirectory)
+        CleanTargetFolder: true
+    - task: CopyFiles@2
+      displayName: 'copy API files to: $(Build.ArtifactStagingDirectory)'
+      inputs:
+        SourceFolder: api/azure-functions
+        TargetFolder: $(Build.ArtifactStagingDirectory)
+        CleanTargetFolder: true
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: drop'
+
