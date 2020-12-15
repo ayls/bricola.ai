@@ -35,4 +35,42 @@ stages:
         CleanTargetFolder: true
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: drop'
+- stage: deploy
+  jobs:
+  - deployment: deploy  
+    displayName: 'Deploy'
+    environment: 'BriscolaAI'    
+    strategy:
+      runOnce:
+        deploy:    
+          # assuming the storage account and azure functions app already exist
+          steps:
+          - task: AzureRmWebAppDeployment@4
+            displayName: deploy api
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'Azure'
+              appType: 'webAppLinux'
+              WebAppName: '$(API_FUNCTIONS_NAME)'
+              packageForLinux: '$$(Agent.BuildDirectory)/drop/api'
+              RuntimeStack: 'PYTHON|3.6'            
+          - task: kasunkodagoda.regex-match-replace.regex-match-replace.RegExMatchReplace@2
+            displayName: RegEx match & replace
+            inputs:
+              PathToFile: $(Agent.BuildDirectory)/drop/web/index.html
+              RegEx: '"baseUrl":"http://localhost:5000"'
+              ValueToReplace: '"baseUrl":"$(API_BASE_URL)"'
+          - task: AzureCLI@1
+            displayName: clean web storage container
+            inputs:
+              azureSubscription: '$(AZURE_SUBSCRIPTION)'
+              scriptLocation: inlineScript
+              inlineScript: az storage blob delete-batch --account-name $(STORAGE_ACCOUNT_NAME) -s \$web
+          - task: AzureCLI@1
+            displayName: deploy to web storage container
+            inputs:
+              azureSubscription: '$(AZURE_SUBSCRIPTION)'
+              scriptLocation: inlineScript
+              inlineScript: az storage blob upload-batch --account-name $(STORAGE_ACCOUNT_NAME) -s . -d \$web
+              workingDirectory: $(Agent.BuildDirectory)/drop/web
 
