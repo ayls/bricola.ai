@@ -41,9 +41,9 @@ stages:
       displayName: 'Build extensions'        
 
     - task: UsePythonVersion@0
-      displayName: 'use Python 3.6'
+      displayName: 'use Python 3.7'
       inputs:
-        versionSpec: 3.6
+        versionSpec: 3.7
 
     - bash: |
         python -m venv worker_venv
