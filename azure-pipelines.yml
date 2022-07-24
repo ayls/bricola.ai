@@ -13,6 +13,10 @@ stages:
   - job: build
     displayName: Build
     steps:
+    - task: NodeTool@0
+      displayName: use node 14.x
+      inputs:
+        versionSpec: '14.x'
     - task: Npm@1
       displayName: npm install
       inputs:
